@@ -29,6 +29,7 @@ func (server *server) Routers() {
 	db := dbutil.GetConnection()
 	router.User(model.NewUser(db), server.app)
 	router.Package(model.NewPackage(db), server.app)
+	router.StudentTeacher(model.NewStudentTeacher(db), server.app)
 }
 
 func (server *server) Listeing() {

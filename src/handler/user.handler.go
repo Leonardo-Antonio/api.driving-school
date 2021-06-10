@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"errors"
 	"net/http"
-	"strings"
 
 	"github.com/Leonardo-Antonio/api.driving-school/src/autorization"
 	"github.com/Leonardo-Antonio/api.driving-school/src/entity"
@@ -132,12 +131,11 @@ func (u *user) SignUpDni(ctx *fiber.Ctx) error {
 		return ctx.Status(http.StatusInternalServerError).JSON(response)
 	}
 
-	user.Rol = strings.Title(strings.ToLower(user.Rol))
 	if err := validate.User(user); err != nil {
 		return ctx.Status(http.StatusBadRequest).
 			JSON(utils.ResponseErr(err.Error(), nil))
 	}
-
+	validate.FieldsUser(&user)
 	user.Password = base64.StdEncoding.EncodeToString([]byte(user.Password))
 	result, err := u.storage.Insert(user)
 	if err != nil {

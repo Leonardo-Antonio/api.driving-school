@@ -6,6 +6,7 @@ import (
 
 	"github.com/Leonardo-Antonio/api.driving-school/src/entity"
 	"github.com/Leonardo-Antonio/api.driving-school/src/utils/const/roles"
+	"github.com/Leonardo-Antonio/api.driving-school/src/utils/const/turn"
 )
 
 var (
@@ -15,6 +16,7 @@ var (
 	errTurnInvalid      = errors.New("the turn you are trying to enter is not valid")
 	errInsecurePassword = errors.New("the password entered is not very secure")
 	errRolRequired      = errors.New("the role field is required")
+	errInstructorTurn   = errors.New("the instructor must have a work schedule")
 )
 
 func User(user entity.User) error {
@@ -24,6 +26,18 @@ func User(user entity.User) error {
 
 	if len(user.Rol) == 0 {
 		return errRolRequired
+	}
+
+	if strings.EqualFold(roles.INSTRUCTOR, user.Rol) {
+		if len(user.Turn) == 0 || &user.Turn == nil {
+			return errInstructorTurn
+		}
+		if strings.EqualFold(turn.MORNING, user.Turn) ||
+			strings.EqualFold(turn.AFTERNOON, user.Turn) ||
+			strings.EqualFold(turn.NIGHT, user.Turn) {
+			return nil
+		}
+		return errInstructorTurn
 	}
 
 	if strings.EqualFold(roles.ADMIN, user.Rol) ||

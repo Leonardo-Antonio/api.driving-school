@@ -36,7 +36,7 @@ func (u *user) Insert(entity entity.User) (result *mongo.InsertOneResult, err er
 	entity.ID = primitive.NewObjectID()
 	entity.Active = true
 	entity.CreatedAt = time.Now()
-	entity.StatusSale = false
+	/* entity.StatusSale = false */ // cambiarlo porq no debe crear como true
 
 	result, err = u.collection.InsertOne(context.TODO(), &entity)
 	if err != nil {
@@ -78,6 +78,19 @@ func (u *user) FindByEmail(logIn entity.User) (user entity.User, err error) {
 	filter := bson.M{
 		"email":    logIn.Email,
 		"password": logIn.Password,
+	}
+
+	if u.collection.FindOne(context.TODO(), filter).Decode(&user) != nil {
+		return
+	}
+
+	return
+}
+
+func (u *user) FindById(ID primitive.ObjectID) (user entity.User, err error) {
+	filter := bson.M{
+		"_id":    ID,
+		"active": true,
 	}
 
 	if u.collection.FindOne(context.TODO(), filter).Decode(&user) != nil {
