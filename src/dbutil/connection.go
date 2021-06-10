@@ -1,4 +1,4 @@
-package db
+package dbutil
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func GetConnection() *mongo.Database {
+func GetConnection() (db *mongo.Database) {
 	clientOptions := options.Client().ApplyURI(utils.Config().MongoUri)
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
@@ -19,6 +19,9 @@ func GetConnection() *mongo.Database {
 	if err := client.Ping(context.TODO(), nil); err != nil {
 		log.Fatalln(err)
 	}
-
-	return client.Database(utils.Config().NameDataBase)
+	db = client.Database(utils.Config().NameDataBase)
+	collection := NewCollectionIndex(db)
+	collection.createIndexUser()
+	collection.createIndexPackage()
+	return
 }

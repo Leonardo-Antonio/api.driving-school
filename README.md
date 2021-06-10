@@ -1,1 +1,16 @@
-## Api Rest - Driving School
+# Api Rest - Driving School
+
+### Commands for generate certificates
+- private certificate:
+    ```shell
+    openssl genrsa -out app.rsa 1024
+    ```
+- public certificate:
+    ```shell
+    openssl rsa -in app.rsa -pubout > app.rsa.pub
+    ```
+
+### Deploy
+```shell
+$ sh deploy.sh
+```

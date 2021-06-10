@@ -20,3 +20,8 @@ node_modules
 
 # Test
 *test
+
+# Certificates
+/src/autorization/keys
+/src/autorization/keys/app.rsa
+/src/autorization/keys/app.rsa.app.rsa.pub
