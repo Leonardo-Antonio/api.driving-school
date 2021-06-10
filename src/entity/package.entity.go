@@ -16,7 +16,7 @@ type Package struct {
 	UpdatedAt   time.Time          `bson:"updated_at,omitempty" json:"updated_at,omitempty" xml:"updated_at,omitempty"`
 	DeletedAt   time.Time          `bson:"deleted_at,omitempty" json:"deleted_at,omitempty" xml:"deleted_at,omitempty"`
 	Active      bool               `bson:"active,omitempty" json:"active,omitempty" xml:"active,omitempty"`
-	CreatedBy   time.Time          `bson:"created_by,omitempty" json:"created_by,omitempty" xml:"created_by,omitempty"`
-	UpdatedBy   time.Time          `bson:"updated_by,omitempty" json:"updated_by,omitempty" xml:"updated_by,omitempty"`
-	DeletedBy   time.Time          `bson:"deleted_by,omitempty" json:"deleted_by,omitempty" xml:"deleted_by,omitempty"`
+	CreatedBy   primitive.ObjectID `bson:"created_by,omitempty" json:"created_by,omitempty" xml:"created_by,omitempty"`
+	UpdatedBy   primitive.ObjectID `bson:"updated_by,omitempty" json:"updated_by,omitempty" xml:"updated_by,omitempty"`
+	DeletedBy   primitive.ObjectID `bson:"deleted_by,omitempty" json:"deleted_by,omitempty" xml:"deleted_by,omitempty"`
 }
