@@ -20,6 +20,8 @@ func GetConnection() (db *mongo.Database) {
 		log.Fatalln(err)
 	}
 	db = client.Database(utils.Config().NameDataBase)
-	createIndexUser(db)
+	collection := NewCollectionIndex(db)
+	collection.createIndexUser()
+	collection.createIndexPackage()
 	return
 }

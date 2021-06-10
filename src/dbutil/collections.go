@@ -1,5 +1,6 @@
 package dbutil
 
 const (
-	CollectionUsers = "users"
+	CollectionUsers    = "users"
+	CollectionPackages = "packages"
 )

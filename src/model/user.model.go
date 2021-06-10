@@ -88,6 +88,7 @@ func (u *user) FindByEmail(logIn entity.User) (user entity.User, err error) {
 }
 
 func (u *user) Update(user entity.User) (result *mongo.UpdateResult, err error) {
+	user.UpdatedAt = time.Now()
 	udpate := bson.M{
 		"$set": user,
 	}

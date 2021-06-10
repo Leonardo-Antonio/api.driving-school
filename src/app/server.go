@@ -26,7 +26,9 @@ func (server *server) Middlewares() {
 }
 
 func (server *server) Routers() {
-	router.User(model.NewUser(dbutil.GetConnection()), server.app)
+	db := dbutil.GetConnection()
+	router.User(model.NewUser(db), server.app)
+	router.Package(model.NewPackage(db), server.app)
 }
 
 func (server *server) Listeing() {
