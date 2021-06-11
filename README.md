@@ -1,5 +1,9 @@
 # Api Rest - Driving School
 
+## EndPoints
+- Users
+```json
+```
 ### Commands for generate certificates
 - private certificate:
     ```shell
@@ -14,3 +18,7 @@
 ```shell
 $ sh deploy.sh
 ```
+
+creo q debe haber un campo en la tb users como teacher-assigned
+los envios de correos como notificaciones
+valdiar q solo un cliente pueda comprar un pquete

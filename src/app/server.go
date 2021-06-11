@@ -30,6 +30,7 @@ func (server *server) Routers() {
 	router.User(model.NewUser(db), server.app)
 	router.Package(model.NewPackage(db), server.app)
 	router.StudentTeacher(model.NewStudentTeacher(db), server.app)
+	router.Sale(model.NewSale(db), server.app)
 }
 
 func (server *server) Listeing() {

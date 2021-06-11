@@ -6,6 +6,7 @@ import (
 
 	"github.com/Leonardo-Antonio/api.driving-school/src/dbutil"
 	"github.com/Leonardo-Antonio/api.driving-school/src/entity"
+	"github.com/Leonardo-Antonio/api.driving-school/src/utils"
 	"github.com/Leonardo-Antonio/api.driving-school/src/utils/const/roles"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -75,9 +76,9 @@ func (st *studentTeacher) findByTurnTeacher(turn string) (teacher []entity.User,
 func (st *studentTeacher) findById(ID primitive.ObjectID) (user entity.User, err error) {
 	filter := bson.M{
 		"_id":    ID,
-		"active": true,
+		"active": true, /*agrefar el estado*/
 	}
-
+	// ademas creo q se debe tener un campoc en la collection users como userAsignetd
 	if st.collectionUser.FindOne(context.TODO(), filter).Decode(&user) != nil {
 		return
 	}
@@ -105,6 +106,17 @@ func (st *studentTeacher) FindByTurn(turn string) (studentTeacher entity.Student
 func (st *studentTeacher) AssingStudentToTeacher(
 	assingStudentToTeacher entity.AssignStudentTeacher,
 ) (result *mongo.InsertOneResult, err error) {
+
+	student, err := st.findById(assingStudentToTeacher.IdClient)
+	teacher, err := st.findById(assingStudentToTeacher.IdTeacher)
+	if err != nil {
+		return nil, err
+	}
+
+	if student.Turn != teacher.Turn {
+		return nil, utils.ErrAssignTurn
+	}
+
 	assingStudentToTeacher.ID = primitive.NewObjectID()
 	assingStudentToTeacher.CreatedAt = time.Now()
 	assingStudentToTeacher.Active = true

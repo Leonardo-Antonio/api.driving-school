@@ -30,5 +30,19 @@ func (s *sale) Buy(ctx *fiber.Ctx) error {
 			JSON(utils.ResponseErr(err.Error(), nil))
 	}
 
-	return nil
+	if err := validate.Turn(sale.Turn); err != nil {
+		return ctx.Status(http.StatusBadRequest).
+			JSON(utils.ResponseErr(err.Error(), nil))
+	}
+
+	validate.FieldsSale(&sale)
+
+	result, err := s.storage.Buy(sale)
+	if err != nil {
+		return ctx.Status(http.StatusInternalServerError).
+			JSON(utils.ResponseErr(err.Error(), nil))
+	}
+
+	return ctx.Status(http.StatusCreated).
+		JSON(utils.ResponseSatisfactory("the purchase was successful", result))
 }

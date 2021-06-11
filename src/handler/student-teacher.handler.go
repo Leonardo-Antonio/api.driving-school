@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 	"strings"
 
@@ -52,6 +53,10 @@ func (st *studentTeacher) AssignStudentToTeacher(ctx *fiber.Ctx) error {
 
 	result, err := st.storage.AssingStudentToTeacher(*assignStudentToTeacher)
 	if err != nil {
+		if errors.Is(err, utils.ErrAssignTurn) {
+			return ctx.Status(http.StatusBadRequest).
+				JSON(utils.ResponseErr(err.Error(), nil))
+		}
 		return ctx.Status(http.StatusInternalServerError).
 			JSON(utils.ResponseErr(err.Error(), nil))
 	}

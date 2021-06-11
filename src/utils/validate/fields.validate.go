@@ -22,3 +22,7 @@ func FieldsPackage(pack *entity.Package) {
 		pack.Content[i] = strings.Title(strings.ToLower(value))
 	}
 }
+
+func FieldsSale(sale *entity.Sale) {
+	sale.Turn = strings.Title(strings.ToLower(sale.Turn))
+}

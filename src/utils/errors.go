@@ -9,4 +9,5 @@ var (
 	ErrIdInvalid           = errors.New("the id you have entered is invalid")
 	ErrNamePackageNotExist = errors.New("package name does not exist")
 	ErrNotUpdated          = errors.New("it was not updated")
+	ErrAssignTurn          = errors.New("student and instructor shifts must coincide")
 )

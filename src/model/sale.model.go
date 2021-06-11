@@ -32,8 +32,12 @@ func NewSale(db *mongo.Database) *sale {
 
 func (s *sale) changeStateSaleUser(id primitive.ObjectID, turn string, state bool) error {
 	update := bson.M{
-		"_id":    id,
-		"active": true,
+		"$set": bson.M{
+			"_id":         id,
+			"active":      true,
+			"turn":        turn,
+			"status_sale": state,
+		},
 	}
 	result, err := s.collectionUser.UpdateByID(context.TODO(), id, update)
 	if err != nil {
