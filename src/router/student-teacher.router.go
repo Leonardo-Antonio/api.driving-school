@@ -17,4 +17,5 @@ func StudentTeacher(storage model.IStudentTeacher, app *fiber.App) {
 
 	group.Get("/:turn", handler.GetByTurn)
 	group.Post("/", handler.AssignStudentToTeacher)
+	group.Get("/teacher/:id", handler.StudentsByTeacher)
 }

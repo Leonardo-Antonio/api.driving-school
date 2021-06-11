@@ -36,7 +36,7 @@ func (u *user) Insert(entity entity.User) (result *mongo.InsertOneResult, err er
 	entity.ID = primitive.NewObjectID()
 	entity.Active = true
 	entity.CreatedAt = time.Now()
-	/* entity.StatusSale = false */ // cambiarlo porq no debe crear como true
+	entity.StatusSale = false // cambiarlo porq no debe crear como true
 
 	result, err = u.collection.InsertOne(context.TODO(), &entity)
 	if err != nil {

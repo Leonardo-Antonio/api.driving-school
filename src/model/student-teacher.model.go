@@ -21,8 +21,10 @@ type (
 	IStudentTeacher interface {
 		findByTurnStudent(turn string) (student []entity.User, err error)
 		findByTurnTeacher(turn string) (teacher []entity.User, err error)
+		findById(ID primitive.ObjectID) (user entity.User, err error)
 		FindByTurn(turn string) (studentTeacher entity.StudentTeacher, err error)
 		AssingStudentToTeacher(assingStudentToTeacher entity.AssignStudentTeacher) (result *mongo.InsertOneResult, err error)
+		StudentsByTeacher(id primitive.ObjectID) (teacherStudents entity.TeacherStudents, err error)
 	}
 )
 
@@ -70,6 +72,19 @@ func (st *studentTeacher) findByTurnTeacher(turn string) (teacher []entity.User,
 	return
 }
 
+func (st *studentTeacher) findById(ID primitive.ObjectID) (user entity.User, err error) {
+	filter := bson.M{
+		"_id":    ID,
+		"active": true,
+	}
+
+	if st.collectionUser.FindOne(context.TODO(), filter).Decode(&user) != nil {
+		return
+	}
+
+	return
+}
+
 func (st *studentTeacher) FindByTurn(turn string) (studentTeacher entity.StudentTeacher, err error) {
 	student, err := st.findByTurnStudent(turn)
 	if err != nil {
@@ -102,6 +117,50 @@ func (st *studentTeacher) AssingStudentToTeacher(
 	return
 }
 
+func (st *studentTeacher) StudentsByTeacher(id primitive.ObjectID) (
+	teacherStudents entity.TeacherStudents,
+	err error,
+) {
+	pipeline := []bson.M{
+		{
+			"$match": bson.M{
+				"id_teacher": id,
+				"active":     true,
+			},
+		},
+		{
+			"$lookup": bson.M{
+				"from":         dbutil.CollectionUsers,
+				"localField":   "id_client",
+				"foreignField": "_id",
+				"as":           "students",
+			},
+		},
+	}
+
+	teacher, err := st.findById(id)
+	if err != nil {
+		return teacherStudents, err
+	}
+
+	cursor, err := st.collection.Aggregate(context.TODO(), pipeline)
+	if err != nil {
+		return
+	}
+
+	var response []entity.TeacherStudents
+	if err := cursor.All(context.TODO(), &response); err != nil {
+		return teacherStudents, err
+	}
+	for _, value := range response {
+		for _, student := range value.Students {
+			teacherStudents.Students = append(teacherStudents.Students, student)
+		}
+	}
+	teacherStudents.Teacher = teacher
+	return
+}
+
 /*
 func (st *studentTeacher) UpdateStudentStateAssignTeacher(Id user) (result *mongo.InsertOneResult, err error) {
 	assingStudentToTeacher.ID = primitive.NewObjectID()
@@ -114,4 +173,63 @@ func (st *studentTeacher) UpdateStudentStateAssignTeacher(Id user) (result *mong
 	}
 
 	return
+} */
+
+/* pipeline := []bson.M{
+	{
+		"$match": bson.M{
+			"id_teacher": id,
+			"active":     true,
+		},
+	},
+	{
+		"lookup": bson.M{
+			"from":         dbutil.CollectionUsers,
+			"localField":   "id_client",
+			"foreignField": "_id",
+			"as":           "students",
+		},
+	},
+} */
+/*
+pipeline := mongo.Pipeline{
+	{
+		bson.M{
+			primitive.E{
+				Key: "$match",
+				Value: bson.D{
+					primitive.E{
+						Key:   "id_teacher",
+						Value: id,
+					},
+					primitive.E{
+						Key:   "active",
+						Value: true,
+					},
+				},
+			},
+		},
+
+		primitive.E{
+			Key: "$lookup",
+			Value: bson.D{
+				primitive.E{
+					Key:   "from",
+					Value: dbutil.CollectionUsers,
+				},
+				primitive.E{
+					Key:   "localField",
+					Value: "id_client",
+				},
+				primitive.E{
+					Key:   "foreignField",
+					Value: "_id",
+				},
+				primitive.E{
+					Key:   "as",
+					Value: "students",
+				},
+			},
+		},
+	},
 } */

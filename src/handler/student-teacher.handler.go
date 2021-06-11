@@ -9,6 +9,7 @@ import (
 	"github.com/Leonardo-Antonio/api.driving-school/src/utils"
 	"github.com/Leonardo-Antonio/api.driving-school/src/utils/validate"
 	"github.com/gofiber/fiber/v2"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type studentTeacher struct {
@@ -62,4 +63,27 @@ func (st *studentTeacher) AssignStudentToTeacher(ctx *fiber.Ctx) error {
 				result,
 			),
 		)
+}
+
+func (st *studentTeacher) StudentsByTeacher(ctx *fiber.Ctx) error {
+	id, err := primitive.ObjectIDFromHex(ctx.Params("id"))
+	if id.IsZero() {
+		return ctx.Status(http.StatusBadRequest).
+			JSON(utils.ResponseErr(utils.ErrIdInvalid.Error(), nil))
+	}
+
+	if err != nil {
+		return ctx.Status(http.StatusBadRequest).
+			JSON(utils.ResponseErr(err.Error(), nil))
+	}
+
+	teacherStudent, err := st.storage.StudentsByTeacher(id)
+	if err != nil {
+		return ctx.Status(http.StatusInternalServerError).
+			JSON(utils.ResponseErr(err.Error(), nil))
+	}
+
+	return ctx.Status(http.StatusOK).
+		JSON(utils.ResponseSatisfactory("ok", teacherStudent))
+
 }

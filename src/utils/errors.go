@@ -8,4 +8,5 @@ var (
 	ErrDniInvalid          = errors.New("the dni entered is not correct")
 	ErrIdInvalid           = errors.New("the id you have entered is invalid")
 	ErrNamePackageNotExist = errors.New("package name does not exist")
+	ErrNotUpdated          = errors.New("it was not updated")
 )
