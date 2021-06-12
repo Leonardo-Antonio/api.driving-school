@@ -29,7 +29,6 @@ func GenerateToken(data *entity.User) (string, error) {
 	return signedToken, nil
 }
 
-// ValidateToken .
 func ValidateToken(t string) (entity.ClaimUser, error) {
 	token, err := jwt.ParseWithClaims(t, &entity.ClaimUser{}, verifyFunction)
 	if err != nil {

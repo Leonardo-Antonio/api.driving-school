@@ -10,6 +10,10 @@ import (
 
 func Sale(storage model.ISale, app *fiber.App) {
 	handler := handler.NewSale(storage)
-	group := app.Group(utils.Config().BaseUri+"/sales", middleware.Authorization)
+	group := app.Group(
+		utils.Config().BaseUri+"/sales",
+		middleware.Authorization,
+		new(middleware.Unauthorized).Client,
+	)
 	group.Post("/", handler.Buy)
 }

@@ -9,6 +9,7 @@ import (
 type Package struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty" json:"_id,omitempty" xml:"_id,omitempty"`
 	Name        string             `bson:"name,omitempty" json:"name,omitempty" xml:"name,omitempty"`
+	Price       float64            `bson:"price,omitempty" json:"price,omitempty" xml:"price,omitempty"`
 	Description string             `bson:"description,omitempty" json:"description,omitempty" xml:"description,omitempty"`
 	Src         string             `bson:"src,omitempty" json:"src,omitempty" xml:"src,omitempty"`
 	Content     []string           `bson:"content,omitempty" json:"content,omitempty" xml:"content,omitempty"`

@@ -15,7 +15,19 @@ func StudentTeacher(storage model.IStudentTeacher, app *fiber.App) {
 		middleware.Authorization,
 	)
 
-	group.Get("/:turn", handler.GetByTurn)
-	group.Post("/", handler.AssignStudentToTeacher)
-	group.Get("/teacher/:id", handler.StudentsByTeacher)
+	group.Get(
+		"/:turn",
+		new(middleware.Unauthorized).Admin,
+		handler.GetByTurn,
+	)
+	group.Post(
+		"/",
+		new(middleware.Unauthorized).Admin,
+		handler.AssignStudentToTeacher,
+	)
+	group.Get(
+		"/teacher/:id",
+		new(middleware.Unauthorized).Instructor,
+		handler.StudentsByTeacher,
+	)
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/Leonardo-Antonio/api.driving-school/src/router"
 	"github.com/Leonardo-Antonio/api.driving-school/src/utils"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
@@ -22,6 +23,7 @@ func NewAppServer() *server {
 }
 
 func (server *server) Middlewares() {
+	server.app.Use(cors.New())
 	server.app.Use(logger.New())
 }
 
