@@ -1,7 +1,7 @@
 # Api Rest - Driving School
 
 
-Para poder usar debe crear un file .env
+Para poder usar debe crear un file .env y crear los certificados para crear el firmar y verificar el token
 ```.env
 MONGO_URI = mongodb://127.0.0.1:27017/
 NAME_DATABASE = driving-school
@@ -15,7 +15,16 @@ API_RENIEC_RUC = https://dniruc.apisperu.com/api/v1/ruc
 API_RENIEC_DNI = https://dniruc.apisperu.com/api/v1/dni
 TOKEN_API_RENIC = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImxlbzIwMDEubmwwOEBnbWFpbC5jb20ifQ.AmjGab5gCfOAPEBsmK75qqUNFDmxsJS-eHHjxJayG1g
 ```
-
+### Commands for generate certificates
+estos certificados deben ser creados en la suguiente ruta src > authorizatin > keys
+- private certificate:
+    ```shell
+    openssl genrsa -out app.rsa 1024
+    ```
+- public certificate:
+    ```shell
+    openssl rsa -in app.rsa -pubout > app.rsa.pub
+    ```
 
 ## EndPoints
 - Users
@@ -139,22 +148,9 @@ go run src/main.go
 prod
 go build src/main.go
 ```
-### Commands for generate certificates
-estos certificados deben ser creados en la suguiente ruta src > authorizatin > keys
-- private certificate:
-    ```shell
-    openssl genrsa -out app.rsa 1024
-    ```
-- public certificate:
-    ```shell
-    openssl rsa -in app.rsa -pubout > app.rsa.pub
-    ```
 
-### Deploy
+
+### Deploy [deprecated]
 ```shell
 $ sh deploy.sh
 ```
-
-creo q debe haber un campo en la tb users como teacher-assigned
-los envios de correos como notificaciones
-valdiar q solo un cliente pueda comprar un pquete
