@@ -127,7 +127,18 @@ body
 Headers {
     Authorization: <token[cliente]>
 ```
+## Run Bin Project
 
+```
+./main
+```
+## Dev and Deploy project 
+```go
+dev
+go run src/main.go
+prod
+go build src/main.go
+```
 ### Commands for generate certificates
 estos certificados deben ser creados en la suguiente ruta src > authorizatin > keys
 - private certificate:
